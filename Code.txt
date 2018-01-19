@@ -1,0 +1,30 @@
+import re                                   #importing regular expression
+
+def replace_all(text, dic):
+    for i, j in dic.items():
+        text = text.replace(i, j)
+    return text
+
+tweet= open("C:/Users/dhana/Desktop/Nepal-training-20K-tweetid.txt",'r',encoding="utf8")
+filePtr=open('NepalDied20K_FilteredTweets.txt','a',encoding="utf8")              #mode of oppenng file to append
+symbol = {'@':'','#':'','&':''}
+
+
+for line in tweet:
+    try:
+        modify=line.split('<||>')[1]
+        #modify=modify.split(':')[1]
+        pattern=r"http\S+"                                  #pattern recognize the URLs
+        saveThis=re.sub(pattern,"",modify)                 # removing URLS by accessing sub method
+        lowerCase=saveThis.lower()
+        pattern1="rt @[\S]*:"                                  #Pattern for all Tag names
+        TagFree=re.sub(pattern1,"",lowerCase) 
+        FinalString = replace_all(TagFree,symbol)
+        print(FinalString)
+        filePtr.write(FinalString)
+        filePtr.write('\n')
+    except Exception as e:
+        print()
+        
+filePtr.close()
+tweet.close()
